@@ -1,0 +1,13 @@
+name: backend-ml-cctv-golang-dev
+services:
+  mysql:
+    image: mysql:9.4
+    container_name: mysql-ml-cctv-golang
+    env_file:
+      - ./.env
+    ports:
+      - '3302:3306'
+    volumes:
+      - mysql-ml-cctv:/var/lib/mysql
+volumes:
+  mysql-ml-cctv:
