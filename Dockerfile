@@ -18,6 +18,12 @@ FROM alpine:3.20
 
 WORKDIR /app
 
+# Instal tzdata untuk timezone
+RUN apk add --no-cache tzdata \
+    && cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime \
+    && echo "Asia/Jakarta" > /etc/timezone \
+    && apk del tzdata
+
 # copy binary dari builder
 COPY --from=builder /app/main .
 COPY .env.prod .env
