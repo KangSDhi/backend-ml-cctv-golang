@@ -63,14 +63,15 @@ func StoreCCTVData(ctx *fiber.Ctx) error {
 		})
 	}
 
+	var result dto.ResponseCCTV
+	result.NamaCCTV = cctvOutput.NamaCCTV
+	result.Objek = cctvOutput.Objek
+	result.Waktu = cctvOutput.CreatedAt.Format(time.RFC3339)
+
 	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"http_code": fiber.StatusCreated,
 		"message":   "Berhasil Memabuat Data CCTV",
-		"data": fiber.Map{
-			"nama_cctv": cctvOutput.NamaCCTV,
-			"objek":     cctvOutput.Objek,
-			"tanggal":   cctvOutput.CreatedAt,
-		},
+		"data":      result,
 	})
 }
 
@@ -84,15 +85,9 @@ func GetLastCCTVData(ctx *fiber.Ctx) error {
 		})
 	}
 
-	type CCTVResponse struct {
-		NamaCCTV string `json:"nama_cctv"`
-		Objek    uint   `json:"objek"`
-		Waktu    string `json:"waktu"`
-	}
-
-	var result []CCTVResponse
+	var result []dto.ResponseCCTV
 	for _, cctv := range cctvs {
-		result = append(result, CCTVResponse{
+		result = append(result, dto.ResponseCCTV{
 			NamaCCTV: cctv.NamaCCTV,
 			Objek:    cctv.Objek,
 			Waktu:    cctv.CreatedAt.Format(time.RFC3339),
