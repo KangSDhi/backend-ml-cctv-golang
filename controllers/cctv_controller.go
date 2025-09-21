@@ -6,6 +6,7 @@ import (
 	"backend-ml-cctv-golang/repository"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -74,19 +75,34 @@ func StoreCCTVData(ctx *fiber.Ctx) error {
 }
 
 func GetLastCCTVData(ctx *fiber.Ctx) error {
-	cctv, err := repository.GetLatestCCTVData()
+	cctvs, err := repository.GetLatestCCTVData()
 
 	if err != nil {
 		return ctx.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"code":   fiber.StatusNotFound,
-			"errors": err.Error(),
+			"http_code": fiber.StatusNotFound,
+			"errors":    err.Error(),
+		})
+	}
+
+	type CCTVResponse struct {
+		NamaCCTV string `json:"nama_cctv"`
+		Objek    uint   `json:"objek"`
+		Waktu    string `json:"waktu"`
+	}
+
+	var result []CCTVResponse
+	for _, cctv := range cctvs {
+		result = append(result, CCTVResponse{
+			NamaCCTV: cctv.NamaCCTV,
+			Objek:    cctv.Objek,
+			Waktu:    cctv.CreatedAt.Format(time.RFC3339),
 		})
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
-		"code":    fiber.StatusOK,
-		"message": "Ok Zone",
-		"data":    cctv,
+		"http_code": fiber.StatusOK,
+		"message":   "Ok Zone",
+		"data":      result,
 	})
 
 }
