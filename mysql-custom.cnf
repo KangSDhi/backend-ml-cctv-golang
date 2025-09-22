@@ -1,0 +1,4 @@
+[mysqld]
+max_connections = 500      # contoh, sesuaikan kebutuhan
+wait_timeout   = 28800     # idle timeout lebih panjang (opsional)
+interactive_timeout = 28800

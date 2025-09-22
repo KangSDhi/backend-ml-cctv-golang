@@ -14,6 +14,7 @@ services:
     ports:
       - "3302:3306"
     volumes:
+      - ./mysql-custom.cnf:/etc/mysql/conf.d/mysql-custom.cnf
       - mysql-ml-cctv:/var/lib/mysql
 
   backend:
