@@ -51,7 +51,7 @@ func StoreCCTVData(ctx *fiber.Ctx) error {
 
 	cctvInput := entity.CCTV{
 		NamaCCTV: input.NamaCCTV,
-		Objek:    input.Objek,
+		Objek:    *input.Objek,
 	}
 
 	cctvOutput, err := repository.SaveCCTVData(cctvInput)
